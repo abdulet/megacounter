@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:orientation="horizontal">
+
+		<EditText
+			android:layout_height="wrap_content"
+			android:ems="10"
+			android:layout_width="wrap_content"
+			android:id="@+id/newCounter"/>
+
+		<Button
+			android:layout_height="wrap_content"
+			android:text="+"
+			android:layout_width="wrap_content"
+			android:onClick="createCounter"
+			android:layout_gravity="right"/>
+
+	</LinearLayout>
+
+	<ScrollView
+		android:layout_height="match_parent"
+		android:layout_width="match_parent">
+
+		<GridLayout
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			rowCount="1"
+			columnCount="1"
+			android:id="@+id/counters"
+			android:columnCount="2"/>
+
+	</ScrollView>
+
+</LinearLayout>
+
