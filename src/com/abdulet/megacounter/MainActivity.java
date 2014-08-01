@@ -31,8 +31,9 @@ public class MainActivity extends Activity
 		EditText counter = (EditText) findViewById(R.id.newCounter);
 		TextView txt = new TextView(view.getContext());
 		TextView hints = new TextView(view.getContext());
-		GridLayout counters = (GridLayout) findViewById(R.id.counters);
-		this.db.execSQL("INSERT INTO counters (name) VALUES('"+counter.getText().toString()+"');");
+		LinearLayout counters = (LinearLayout) findViewById(R.id.counters);
+		LinearLayout row = new LinearLayout(counters.getContext());
+		row.setLayoutMode(row.HORIZONTAL);
 		ContentValues values = new ContentValues();
 		values.put("name", counter.getText().toString());
 		long counterId = this.db.insert("counters","",values);
@@ -59,8 +60,9 @@ public class MainActivity extends Activity
 			}
 		});
 		*/
-		counters.addView(txt);
-		counters.addView(hints);
+		row.addView(txt);
+		row.addView(hints);
+		counters.addView(row);
 		counter.setText("");
 	}
 	
@@ -81,6 +83,8 @@ public class MainActivity extends Activity
 			row.addView(txt);
 			row.addView(hints);
 			counters.addView(row);
+			//Log.d("aaaaaa", c.getString(0));
+			//Log.d("bbbbbb", c.getString(1));
 			c.moveToNext();
 		}
 		c.close();
