@@ -65,10 +65,12 @@ public class MainActivity extends Activity
 	}
 	
 	public void loadCounters(){
-		GridLayout counters = (GridLayout) findViewById(R.id.counters);
+		LinearLayout counters = (LinearLayout) findViewById(R.id.counters);
 		Cursor c = db.rawQuery("SELECT * from counters", null);
 		c.moveToFirst();
 		while (c.isAfterLast() == false){
+			LinearLayout row = new LinearLayout(counters.getContext());
+			row.setLayoutMode(row.HORIZONTAL);
 			TextView txt = new TextView(counters.getContext());
 			TextView hints = new TextView(counters.getContext());
 			txt.setText(c.getString(1));
@@ -76,8 +78,9 @@ public class MainActivity extends Activity
 			hnt.moveToFirst();
 			hints.setText(hnt.getString(0));
 			hnt.close();
-			counters.addView(txt);
-			counters.addView(hints);
+			row.addView(txt);
+			row.addView(hints);
+			counters.addView(row);
 			c.moveToNext();
 		}
 		c.close();
