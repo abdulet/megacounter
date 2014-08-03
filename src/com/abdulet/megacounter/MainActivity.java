@@ -84,9 +84,11 @@ public class MainActivity extends Activity
 			TextView hints = new TextView(this);
 			txt.setText(c.getString(1));
             txt.setLayoutParams(lpTxt);
+			txt.setTextSize(50);
 			Cursor hnt = this.db.rawQuery("select count(date) from hints where id="+c.getLong(c.getColumnIndex("id"))+";",null);
 			hnt.moveToFirst();
 			hints.setText(hnt.getString(0));
+			hints.setTextSize(50);
 			hnt.close();
 			row.addView(txt);
 			row.addView(hints);

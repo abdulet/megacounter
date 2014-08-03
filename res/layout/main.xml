@@ -14,14 +14,14 @@
 			android:layout_height="wrap_content"
 			android:ems="10"
 			android:layout_width="wrap_content"
-			android:id="@+id/newCounter"/>
+			android:id="@+id/newCounter"
+			android:layout_weight="1"/>
 
 		<Button
 			android:layout_height="wrap_content"
 			android:text="+"
 			android:layout_width="wrap_content"
-			android:onClick="createCounter"
-			android:layout_gravity="right"/>
+			android:onClick="createCounter"/>
 
 	</LinearLayout>
 
