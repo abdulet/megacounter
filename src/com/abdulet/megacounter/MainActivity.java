@@ -5,18 +5,19 @@ import android.os.*;
 import android.util.AttributeSet;
 import android.view.*;
 import android.widget.*;
-//import android.widget.RadioGroup.*;
-//import android.support.v4.util.*;
-//import android.util.*;
+import android.widget.RadioGroup.*;
+import android.support.v4.util.*;
+import android.util.*;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.*;
-//import android.nfc.*;
+import android.nfc.*;
 
 public class MainActivity extends Activity
 {
     /** Called when the activity is first created. */
 	private SQLiteDatabase db;
+	private long counterId;
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
@@ -37,33 +38,32 @@ public class MainActivity extends Activity
 		row.setOrientation(LinearLayout.HORIZONTAL);
 		ContentValues values = new ContentValues();
 		values.put("name", counter.getText().toString());
-		long counterId = this.db.insert("counters","",values);
+		this.counterId = this.db.insert("counters","",values);
         LinearLayout.LayoutParams lpTxt = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lpTxt.weight = 1;
 		txt.setText(counter.getText());
-		txt.setTextSize(50);
+		txt.setTextSize(35);
         txt.setLayoutParams(lpTxt);
 		hints.setText("0");
-		/*
-		hints.setTag(0, counterId);
-		hints.setTag(1, hints);
-		hints.setTag(2, this.db);
-		*/
-		hints.setTextSize(50);
-		hints.setClickable(true);
-		/*
-		txt.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				long id = v.getTag(0);
-				TextView tv = (TextView) v.getTag(1);
-				SQLiteDatabase db = (SQLiteDatabase) v.getTag(2);
-				int hints = Integer.parseInt(tv.getText().toString());
-				tv.setText(Integer.toString(hints++));
-				db.execSQL("insert into hints (id) values ("+id+");");
-			}
-		});
-		*/
+		hints.setTag(this.counterId);
+		hints.setTextSize(35);
+		row.setClickable(true);
+		row.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View v) {
+					LinearLayout row = (LinearLayout) v;
+					TextView tv = (TextView) row.getChildAt(1);
+					long id = tv.getTag();
+					Log.d("id", Long.toString(id));
+					SQLiteDatabase db = openOrCreateDatabase("megaCounter",MODE_PRIVATE,null);
+					int hints = Integer.parseInt(tv.getText().toString());
+					Log.d("hints",Integer.toString(hints++));
+					tv.setText(Integer.toString(hints++));
+					db.execSQL("insert into hints (id) values ("+ Long.toString(id) +")");
+					Log.d("query","insert into hints (id) values ("+ Long.toString(id) +")");
+					db.close();
+				}
+			});
 		row.addView(txt);
 		row.addView(hints);
 		counters.addView(row);
@@ -77,6 +77,7 @@ public class MainActivity extends Activity
         LinearLayout.LayoutParams lpTxt = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lpTxt.weight = 1;
 		while (!c.isAfterLast()){
+			this.counterId = c.getLong(0);
 			LinearLayout row = new LinearLayout(this);
 			row.setOrientation(LinearLayout.HORIZONTAL);
 			row.setGravity(Gravity.LEFT|Gravity.TOP);
@@ -84,14 +85,32 @@ public class MainActivity extends Activity
 			TextView hints = new TextView(this);
 			txt.setText(c.getString(1));
             txt.setLayoutParams(lpTxt);
-			txt.setTextSize(50);
+			txt.setTextSize(35);
 			Cursor hnt = this.db.rawQuery("select count(date) from hints where id="+c.getLong(c.getColumnIndex("id"))+";",null);
 			hnt.moveToFirst();
 			hints.setText(hnt.getString(0));
-			hints.setTextSize(50);
+			hints.setTextSize(35);
+			hints.setTag(this.counterId);
 			hnt.close();
 			row.addView(txt);
 			row.addView(hints);
+			row.setClickable(true);
+			row.setOnClickListener(new OnClickListener(){
+					@Override
+					public void onClick(View v) {
+						LinearLayout row = (LinearLayout) v;
+						TextView tv = (TextView) row.getChildAt(1);
+						long id = tv.getTag();
+						Log.d("id", Long.toString(id));
+						SQLiteDatabase db = openOrCreateDatabase("megaCounter",MODE_PRIVATE,null);
+						int hints = Integer.parseInt(tv.getText().toString());
+						Log.d("hints",Integer.toString(hints++));
+						tv.setText(Integer.toString(hints++));
+						db.execSQL("insert into hints (id) values ("+ Long.toString(id) +")");
+						Log.d("query","insert into hints (id) values ("+ Long.toString(id) +")");
+						db.close();
+					}
+				});
 			counters.addView(row);
 			//Log.d("aaaaaa", c.getString(0));
 			//Log.d("bbbbbb", c.getString(1));
