@@ -33,7 +33,7 @@ public class MainActivity extends Activity
 		TextView hints = new TextView(view.getContext());
 		LinearLayout counters = (LinearLayout) findViewById(R.id.counters);
 		LinearLayout row = new LinearLayout(this);
-		row.setLayoutMode(LinearLayout.HORIZONTAL);
+		//row.setLayoutMode(LinearLayout.HORIZONTAL);
 		ContentValues values = new ContentValues();
 		values.put("name", counter.getText().toString());
 		long counterId = this.db.insert("counters","",values);
@@ -72,7 +72,7 @@ public class MainActivity extends Activity
 		c.moveToFirst();
 		while (!c.isAfterLast()){
 			LinearLayout row = new LinearLayout(this);
-			row.setLayoutMode(LinearLayout.HORIZONTAL);
+			//row.setLayoutMode(LinearLayout.HORIZONTAL);
 			row.setGravity(Gravity.LEFT|Gravity.TOP);
 			TextView txt = new TextView(this);
 			TextView hints = new TextView(this);
