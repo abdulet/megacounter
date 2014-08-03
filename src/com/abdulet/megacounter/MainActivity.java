@@ -4,19 +4,19 @@ import android.app.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
-import android.widget.RadioGroup.*;
-import android.support.v4.util.*;
-import android.util.*;
+//import android.widget.RadioGroup.*;
+//import android.support.v4.util.*;
+//import android.util.*;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.*;
-import android.nfc.*;
+//import android.nfc.*;
 
 public class MainActivity extends Activity
 {
     /** Called when the activity is first created. */
-    @Override
 	private SQLiteDatabase db;
+    @Override
     public void onCreate(Bundle savedInstanceState)
 	{
         super.onCreate(savedInstanceState);
@@ -32,8 +32,8 @@ public class MainActivity extends Activity
 		TextView txt = new TextView(view.getContext());
 		TextView hints = new TextView(view.getContext());
 		LinearLayout counters = (LinearLayout) findViewById(R.id.counters);
-		LinearLayout row = new LinearLayout(this,null,R.style.row);
-		row.setLayoutMode(row.HORIZONTAL);
+		LinearLayout row = new LinearLayout(this);
+		row.setLayoutMode(LinearLayout.HORIZONTAL);
 		ContentValues values = new ContentValues();
 		values.put("name", counter.getText().toString());
 		long counterId = this.db.insert("counters","",values);
@@ -70,12 +70,12 @@ public class MainActivity extends Activity
 		LinearLayout counters = (LinearLayout) findViewById(R.id.counters);
 		Cursor c = db.rawQuery("SELECT * from counters", null);
 		c.moveToFirst();
-		while (c.isAfterLast() == false){
-			LinearLayout row = new LinearLayout(this,null,R.style.row);
-			row.setLayoutMode(row.HORIZONTAL);
+		while (!c.isAfterLast()){
+			LinearLayout row = new LinearLayout(this);
+			row.setLayoutMode(LinearLayout.HORIZONTAL);
 			row.setGravity(Gravity.LEFT|Gravity.TOP);
-			TextView txt = new TextView(this,null,R.style.tv_name);
-			TextView hints = new TextView(this,null,R.style.tv_hints);
+			TextView txt = new TextView(this);
+			TextView hints = new TextView(this);
 			txt.setText(c.getString(1));
 			Cursor hnt = this.db.rawQuery("select count(date) from hints where id="+c.getLong(c.getColumnIndex("id"))+";",null);
 			hnt.moveToFirst();
