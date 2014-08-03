@@ -2,6 +2,7 @@ package com.abdulet.megacounter;
 
 import android.app.*;
 import android.os.*;
+import android.util.AttributeSet;
 import android.view.*;
 import android.widget.*;
 //import android.widget.RadioGroup.*;
@@ -33,12 +34,15 @@ public class MainActivity extends Activity
 		TextView hints = new TextView(view.getContext());
 		LinearLayout counters = (LinearLayout) findViewById(R.id.counters);
 		LinearLayout row = new LinearLayout(this);
-		//row.setLayoutMode(LinearLayout.HORIZONTAL);
+		row.setOrientation(LinearLayout.HORIZONTAL);
 		ContentValues values = new ContentValues();
 		values.put("name", counter.getText().toString());
 		long counterId = this.db.insert("counters","",values);
+        LinearLayout.LayoutParams lpTxt = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lpTxt.weight = 1;
 		txt.setText(counter.getText());
 		txt.setTextSize(50);
+        txt.setLayoutParams(lpTxt);
 		hints.setText("0");
 		/*
 		hints.setTag(0, counterId);
@@ -70,13 +74,16 @@ public class MainActivity extends Activity
 		LinearLayout counters = (LinearLayout) findViewById(R.id.counters);
 		Cursor c = db.rawQuery("SELECT * from counters", null);
 		c.moveToFirst();
+        LinearLayout.LayoutParams lpTxt = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lpTxt.weight = 1;
 		while (!c.isAfterLast()){
 			LinearLayout row = new LinearLayout(this);
-			//row.setLayoutMode(LinearLayout.HORIZONTAL);
+			row.setOrientation(LinearLayout.HORIZONTAL);
 			row.setGravity(Gravity.LEFT|Gravity.TOP);
 			TextView txt = new TextView(this);
 			TextView hints = new TextView(this);
 			txt.setText(c.getString(1));
+            txt.setLayoutParams(lpTxt);
 			Cursor hnt = this.db.rawQuery("select count(date) from hints where id="+c.getLong(c.getColumnIndex("id"))+";",null);
 			hnt.moveToFirst();
 			hints.setText(hnt.getString(0));
