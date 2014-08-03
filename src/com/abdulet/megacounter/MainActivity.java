@@ -2,16 +2,16 @@ package com.abdulet.megacounter;
 
 import android.app.*;
 import android.os.*;
-import android.util.AttributeSet;
+//import android.util.AttributeSet;
 import android.view.*;
 import android.widget.*;
-import android.widget.RadioGroup.*;
-import android.support.v4.util.*;
+//import android.widget.RadioGroup.*;
+//import android.support.v4.util.*;
 import android.util.*;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.*;
-import android.nfc.*;
+//import android.nfc.*;
 
 public class MainActivity extends Activity
 {
@@ -48,12 +48,12 @@ public class MainActivity extends Activity
 		hints.setTag(this.counterId);
 		hints.setTextSize(35);
 		row.setClickable(true);
-		row.setOnClickListener(new OnClickListener(){
+		row.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					LinearLayout row = (LinearLayout) v;
 					TextView tv = (TextView) row.getChildAt(1);
-					long id = tv.getTag();
+					long id = (Long) tv.getTag();
 					Log.d("id", Long.toString(id));
 					SQLiteDatabase db = openOrCreateDatabase("megaCounter",MODE_PRIVATE,null);
 					int hints = Integer.parseInt(tv.getText().toString());
@@ -95,22 +95,22 @@ public class MainActivity extends Activity
 			row.addView(txt);
 			row.addView(hints);
 			row.setClickable(true);
-			row.setOnClickListener(new OnClickListener(){
-					@Override
-					public void onClick(View v) {
-						LinearLayout row = (LinearLayout) v;
-						TextView tv = (TextView) row.getChildAt(1);
-						long id = tv.getTag();
-						Log.d("id", Long.toString(id));
-						SQLiteDatabase db = openOrCreateDatabase("megaCounter",MODE_PRIVATE,null);
-						int hints = Integer.parseInt(tv.getText().toString());
-						Log.d("hints",Integer.toString(hints++));
-						tv.setText(Integer.toString(hints++));
-						db.execSQL("insert into hints (id) values ("+ Long.toString(id) +")");
-						Log.d("query","insert into hints (id) values ("+ Long.toString(id) +")");
-						db.close();
-					}
-				});
+			row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LinearLayout row = (LinearLayout) v;
+                    TextView tv = (TextView) row.getChildAt(1);
+                    long id = (Long) tv.getTag();
+                    Log.d("id", Long.toString(id));
+                    SQLiteDatabase db = openOrCreateDatabase("megaCounter", MODE_PRIVATE, null);
+                    int hints = Integer.parseInt(tv.getText().toString());
+                    Log.d("hints", Integer.toString(hints++));
+                    tv.setText(Integer.toString(hints++));
+                    db.execSQL("insert into hints (id) values (" + Long.toString(id) + ")");
+                    Log.d("query", "insert into hints (id) values (" + Long.toString(id) + ")");
+                    db.close();
+                }
+            });
 			counters.addView(row);
 			//Log.d("aaaaaa", c.getString(0));
 			//Log.d("bbbbbb", c.getString(1));
