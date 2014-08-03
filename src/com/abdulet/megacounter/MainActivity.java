@@ -32,20 +32,20 @@ public class MainActivity extends Activity
 		TextView txt = new TextView(view.getContext());
 		TextView hints = new TextView(view.getContext());
 		LinearLayout counters = (LinearLayout) findViewById(R.id.counters);
-		LinearLayout row = new LinearLayout(counters.getContext());
+		LinearLayout row = new LinearLayout(this,null,R.style.row);
 		row.setLayoutMode(row.HORIZONTAL);
 		ContentValues values = new ContentValues();
 		values.put("name", counter.getText().toString());
 		long counterId = this.db.insert("counters","",values);
 		txt.setText(counter.getText());
-		txt.setTextSize(15);
+		txt.setTextSize(50);
 		hints.setText("0");
 		/*
 		hints.setTag(0, counterId);
 		hints.setTag(1, hints);
 		hints.setTag(2, this.db);
 		*/
-		hints.setTextSize(15);
+		hints.setTextSize(50);
 		hints.setClickable(true);
 		/*
 		txt.setOnClickListener(new OnClickListener(){
@@ -71,10 +71,11 @@ public class MainActivity extends Activity
 		Cursor c = db.rawQuery("SELECT * from counters", null);
 		c.moveToFirst();
 		while (c.isAfterLast() == false){
-			LinearLayout row = new LinearLayout(counters.getContext());
+			LinearLayout row = new LinearLayout(this,null,R.style.row);
 			row.setLayoutMode(row.HORIZONTAL);
-			TextView txt = new TextView(counters.getContext());
-			TextView hints = new TextView(counters.getContext());
+			row.setGravity(Gravity.LEFT|Gravity.TOP);
+			TextView txt = new TextView(this,null,R.style.tv_name);
+			TextView hints = new TextView(this,null,R.style.tv_hints);
 			txt.setText(c.getString(1));
 			Cursor hnt = this.db.rawQuery("select count(date) from hints where id="+c.getLong(c.getColumnIndex("id"))+";",null);
 			hnt.moveToFirst();
