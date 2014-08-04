@@ -147,7 +147,7 @@ public class MainActivity extends Activity
     private void subtract(TextView tv){
         int hints = Integer.parseInt(tv.getText().toString());
         tv.setText(Integer.toString(hints--));
-        this.db.execSQL("");
+        this.db.execSQL("delete from hints where (id = "+ tv.getTag().toString() +" and date=(select last(date) from hints where (id="+ tv.getTag().toString() +")))");
     }
 
     private void delete( LinearLayout row ){
