@@ -64,6 +64,7 @@ public class MainActivity extends Activity
 					db.close();
 				}
 			});
+		registerForContextMenu(row);
 		row.addView(txt);
 		row.addView(hints);
 		counters.addView(row);
@@ -111,6 +112,7 @@ public class MainActivity extends Activity
                     db.close();
                 }
             });
+			registerForContextMenu(row);
 			counters.addView(row);
 			//Log.d("aaaaaa", c.getString(0));
 			//Log.d("bbbbbb", c.getString(1));
@@ -118,4 +120,13 @@ public class MainActivity extends Activity
 		}
 		c.close();
 	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.contextual, menu);
+	}
+
+	
 }
