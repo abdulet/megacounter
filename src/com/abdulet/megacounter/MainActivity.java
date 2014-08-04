@@ -49,21 +49,21 @@ public class MainActivity extends Activity
 		hints.setTextSize(35);
 		row.setClickable(true);
 		row.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					LinearLayout row = (LinearLayout) v;
-					TextView tv = (TextView) row.getChildAt(1);
-					long id = (Long) tv.getTag();
-					Log.d("id", Long.toString(id));
-					SQLiteDatabase db = openOrCreateDatabase("megaCounter",MODE_PRIVATE,null);
-					int hints = Integer.parseInt(tv.getText().toString());
-					Log.d("hints",Integer.toString(hints++));
-					tv.setText(Integer.toString(hints++));
-					db.execSQL("insert into hints (id) values ("+ Long.toString(id) +")");
-					Log.d("query","insert into hints (id) values ("+ Long.toString(id) +")");
-					db.close();
-				}
-			});
+            @Override
+            public void onClick(View v) {
+                LinearLayout row = (LinearLayout) v;
+                TextView tv = (TextView) row.getChildAt(1);
+                long id = (Long) tv.getTag();
+                Log.d("id", Long.toString(id));
+                SQLiteDatabase db = openOrCreateDatabase("megaCounter", MODE_PRIVATE, null);
+                int hints = Integer.parseInt(tv.getText().toString());
+                Log.d("hints", Integer.toString(hints++));
+                tv.setText(Integer.toString(hints++));
+                db.execSQL("insert into hints (id) values (" + Long.toString(id) + ")");
+                Log.d("query", "insert into hints (id) values (" + Long.toString(id) + ")");
+                db.close();
+            }
+        });
 		registerForContextMenu(row);
 		row.addView(txt);
 		row.addView(hints);
@@ -125,8 +125,30 @@ public class MainActivity extends Activity
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.contextual, menu);
+		inflater.inflate(R.menu.contextual_menu, menu);
 	}
 
-	
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.menu_sub:
+                LinearLayout row = (LinearLayout) info.targetView.getParent();
+                this.subtract( (TextView) row.getChildAt(1));
+                return true;
+            case R.id.menu_del:
+                LinearLayout ll = (LinearLayout) info.targetView.getParent();
+                this.delete(ll);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    private void subtract(TextView tv){
+
+    }
+
+    private void delete( LinearLayout row ){
+
+    }
 }
