@@ -18,6 +18,7 @@ public class MainActivity extends Activity
     /** Called when the activity is first created. */
 	private SQLiteDatabase db;
 	private long counterId;
+	private View target;
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
@@ -57,7 +58,8 @@ public class MainActivity extends Activity
                 Log.d("id", Long.toString(id));
                 SQLiteDatabase db = openOrCreateDatabase("megaCounter", MODE_PRIVATE, null);
                 int hints = Integer.parseInt(tv.getText().toString());
-                Log.d("hints", Integer.toString(hints++));
+				hints+=1;
+                Log.d("hints", Integer.toString(hints));
                 tv.setText(Integer.toString(hints++));
                 db.execSQL("insert into hints (id) values (" + Long.toString(id) + ")");
                 Log.d("query", "insert into hints (id) values (" + Long.toString(id) + ")");
@@ -102,13 +104,14 @@ public class MainActivity extends Activity
                     LinearLayout row = (LinearLayout) v;
                     TextView tv = (TextView) row.getChildAt(1);
                     long id = (Long) tv.getTag();
-                    Log.d("id", Long.toString(id));
+                    //Log.d("id", Long.toString(id));
                     SQLiteDatabase db = openOrCreateDatabase("megaCounter", MODE_PRIVATE, null);
                     int hints = Integer.parseInt(tv.getText().toString());
-                    Log.d("hints", Integer.toString(hints++));
-                    tv.setText(Integer.toString(hints++));
+                    //Log.d("hints", Integer.toString(hints++));
+					hints+=1;
+                    tv.setText(Integer.toString(hints));
                     db.execSQL("insert into hints (id) values (" + Long.toString(id) + ")");
-                    Log.d("query", "insert into hints (id) values (" + Long.toString(id) + ")");
+                    //Log.d("query", "insert into hints (id) values (" + Long.toString(id) + ")");
                     db.close();
                 }
             });
@@ -125,19 +128,25 @@ public class MainActivity extends Activity
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
+		this.target = v;
+		LinearLayout row = (LinearLayout) v;
+		TextView tv = (TextView) row.getChildAt(0);
 		inflater.inflate(R.menu.contextual_menu, menu);
+		String menuTitle = getString(R.string.menu_del)+" "+tv.getText().toString();
+		menu.add(0,99,0,menuTitle);
 	}
 
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+		Log.d("aaaa", this.target.toString());
+		LinearLayout row = (LinearLayout) this.target;
         switch (item.getItemId()) {
             case R.id.menu_sub:
-                LinearLayout row = (LinearLayout) info.targetView.getParent();
+				Log.d("iii",row.getChildAt(1).toString());
                 this.subtract( (TextView) row.getChildAt(1));
                 return true;
-            case R.id.menu_del:
-                LinearLayout ll = (LinearLayout) info.targetView.getParent();
-                this.delete(ll);
+            case 99:
+                this.delete(row);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -146,11 +155,27 @@ public class MainActivity extends Activity
 
     private void subtract(TextView tv){
         int hints = Integer.parseInt(tv.getText().toString());
-        tv.setText(Integer.toString(hints--));
-        this.db.execSQL("delete from hints where (id = "+ tv.getTag().toString() +" and date=(select last(date) from hints where (id="+ tv.getTag().toString() +")))");
+		hints-=1;
+        tv.setText(Integer.toString(hints));
+        this.db.execSQL("delete from hints where(id="+ tv.getTag().toString() +" and date=(select max(date) from hints where id="+ tv.getTag().toString() +"))");
     }
 
     private void delete( LinearLayout row ){
-
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() { 
+		public void onClick(DialogInterface dialog, int which) {
+			switch (which) {
+				case DialogInterface.BUTTON_POSITIVE:
+					LinearLayout row = (LinearLayout) MainActivity.this.target;
+					TextView tv = (TextView) row.getChildAt(1);
+					Integer id = Integer.parseInt( tv.getTag().toString());
+					MainActivity.this.db.execSQL("delete from hints where (id="+id.toString()+")");
+					MainActivity.this.db.execSQL("delete from counters where (id="+id.toString()+")");
+					row.removeAllViews();
+				break;
+			}
+		}
+		};
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
     }
 }
