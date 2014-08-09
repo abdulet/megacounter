@@ -104,21 +104,16 @@ public class MainActivity extends Activity
                     LinearLayout row = (LinearLayout) v;
                     TextView tv = (TextView) row.getChildAt(1);
                     long id = (Long) tv.getTag();
-                    //Log.d("id", Long.toString(id));
                     SQLiteDatabase db = openOrCreateDatabase("megaCounter", MODE_PRIVATE, null);
                     int hints = Integer.parseInt(tv.getText().toString());
-                    //Log.d("hints", Integer.toString(hints++));
 					hints+=1;
                     tv.setText(Integer.toString(hints));
                     db.execSQL("insert into hints (id) values (" + Long.toString(id) + ")");
-                    //Log.d("query", "insert into hints (id) values (" + Long.toString(id) + ")");
                     db.close();
                 }
             });
 			registerForContextMenu(row);
 			counters.addView(row);
-			//Log.d("aaaaaa", c.getString(0));
-			//Log.d("bbbbbb", c.getString(1));
 			c.moveToNext();
 		}
 		c.close();
@@ -138,11 +133,9 @@ public class MainActivity extends Activity
 
     public boolean onContextItemSelected(MenuItem item) {
         //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-		Log.d("aaaa", this.target.toString());
 		LinearLayout row = (LinearLayout) this.target;
         switch (item.getItemId()) {
             case R.id.menu_sub:
-				Log.d("iii",row.getChildAt(1).toString());
                 this.subtract( (TextView) row.getChildAt(1));
                 return true;
             case 99:
