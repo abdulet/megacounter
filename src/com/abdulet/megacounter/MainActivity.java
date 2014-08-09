@@ -128,7 +128,7 @@ public class MainActivity extends Activity
 		TextView tv = (TextView) row.getChildAt(0);
 		inflater.inflate(R.menu.contextual_menu, menu);
 		String menuTitle = getString(R.string.menu_del)+" "+tv.getText().toString();
-		menu.add(0,99,0,menuTitle);
+		menu.add(0,R.id.menu_del,0,menuTitle);
 	}
 
     public boolean onContextItemSelected(MenuItem item) {
@@ -138,7 +138,7 @@ public class MainActivity extends Activity
             case R.id.menu_sub:
                 this.subtract( (TextView) row.getChildAt(1));
                 return true;
-            case 99:
+            case R.id.menu_del:
                 this.delete(row);
                 return true;
             default:

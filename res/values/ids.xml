@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<resources>
+		<item type="id" name="counters" />
+		<item type="id" name="newCounter" />
+		<item type="id" name="menu_sub" />
+		<item type="id" name="menu_del" />
+	</resources>

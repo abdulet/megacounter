@@ -11,10 +11,10 @@
 		android:orientation="horizontal">
 
 		<EditText
-			android:layout_height="wrap_content"
+			android:layout_height="match_parent"
 			android:ems="10"
-			android:layout_width="wrap_content"
-			android:id="@+id/newCounter"
+			android:layout_width="match_parent"
+			android:id="@id/newCounter"
 			android:layout_weight="1"/>
 
 		<Button
@@ -33,9 +33,9 @@
 			android:layout_height="match_parent"
 			android:layout_width="match_parent"
 			android:orientation="vertical"
-			android:id="@+id/counters"
+			android:id="@id/counters"
 			android:gravity="top"/>
-
 	</ScrollView>
 
 </LinearLayout>
+
