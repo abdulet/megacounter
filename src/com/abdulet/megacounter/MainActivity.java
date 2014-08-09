@@ -75,7 +75,7 @@ public class MainActivity extends Activity
 	
 	public void loadCounters(){
 		LinearLayout counters = (LinearLayout) findViewById(R.id.counters);
-		Cursor c = db.rawQuery("SELECT * from counters", null);
+		Cursor c = db.rawQuery("SELECT * FROM counters ORDER BY name", null);
 		c.moveToFirst();
         LinearLayout.LayoutParams lpTxt = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lpTxt.weight = 1;
