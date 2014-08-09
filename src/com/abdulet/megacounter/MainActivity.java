@@ -169,6 +169,6 @@ public class MainActivity extends Activity
 		}
 		};
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+		builder.setMessage(getString(R.string.confirm_deletion)).setPositiveButton(getString(R.string.yes), dialogClickListener).setNegativeButton(getString(R.string.cancel), dialogClickListener).show();
     }
 }

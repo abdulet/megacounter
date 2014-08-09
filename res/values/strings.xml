@@ -3,4 +3,7 @@
     <string name="app_name">MegaCounter</string>
     <string name="menu_sub">Subtract</string>
     <string name="menu_del">Delete counter</string>
+	<string name="yes">Yes</string>
+	<string name="cancel">Cancel</string>
+	<string name="confirm_deletion">Please confirm to remove the counter.</string>
 </resources>
