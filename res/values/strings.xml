@@ -4,6 +4,6 @@
     <string name="menu_sub">Subtract</string>
     <string name="menu_del">Delete counter</string>
 	<string name="yes">Yes</string>
-	<string name="cancel">Cancel</string>
+	<string name="no">No</string>
 	<string name="confirm_deletion">Please confirm to remove the counter.</string>
 </resources>

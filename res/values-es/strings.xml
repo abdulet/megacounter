@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MegaContador</string>
+    <string name="menu_sub">Restar</string>
+    <string name="menu_del">Eliminar contador</string>
+	<string name="yes">Sí</string>
+	<string name="no">No</string>
+	<string name="confirm_deletion">Por favor confirma que quieres eliminar el contador.</string>
+</resources>
