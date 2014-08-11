@@ -17,8 +17,8 @@ public class MainActivity extends Activity
 {
     /** Called when the activity is first created. */
 	private SQLiteDatabase db;
-	private long counterId;
 	private View target;
+	private String counterName;
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
@@ -32,44 +32,11 @@ public class MainActivity extends Activity
 	
 	public void createCounter (View view){
 		EditText counter = (EditText) findViewById(R.id.newCounter);
-		TextView txt = new TextView(view.getContext());
-		TextView hints = new TextView(view.getContext());
-		LinearLayout counters = (LinearLayout) findViewById(R.id.counters);
-		LinearLayout row = new LinearLayout(this);
-		row.setOrientation(LinearLayout.HORIZONTAL);
 		ContentValues values = new ContentValues();
 		values.put("name", counter.getText().toString());
-		this.counterId = this.db.insert("counters","",values);
-        LinearLayout.LayoutParams lpTxt = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lpTxt.weight = 1;
-		txt.setText(counter.getText());
-		txt.setTextSize(35);
-        txt.setLayoutParams(lpTxt);
-		hints.setText("0");
-		hints.setTag(this.counterId);
-		hints.setTextSize(35);
-		row.setClickable(true);
-		row.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LinearLayout row = (LinearLayout) v;
-                TextView tv = (TextView) row.getChildAt(1);
-                long id = (Long) tv.getTag();
-                Log.d("id", Long.toString(id));
-                SQLiteDatabase db = openOrCreateDatabase("megaCounter", MODE_PRIVATE, null);
-                int hints = Integer.parseInt(tv.getText().toString());
-				hints+=1;
-                Log.d("hints", Integer.toString(hints));
-                tv.setText(Integer.toString(hints++));
-                db.execSQL("insert into hints (id) values (" + Long.toString(id) + ")");
-                Log.d("query", "insert into hints (id) values (" + Long.toString(id) + ")");
-                db.close();
-            }
-        });
-		registerForContextMenu(row);
-		row.addView(txt);
-		row.addView(hints);
-		counters.addView(row);
+		this.db.insert("counters","",values);
+		this.clearLayouts();
+		this.loadCounters();
 		counter.setText("");
 	}
 	
@@ -80,7 +47,6 @@ public class MainActivity extends Activity
         LinearLayout.LayoutParams lpTxt = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lpTxt.weight = 1;
 		while (!c.isAfterLast()){
-			this.counterId = c.getLong(0);
 			LinearLayout row = new LinearLayout(this);
 			row.setOrientation(LinearLayout.HORIZONTAL);
 			row.setGravity(Gravity.LEFT|Gravity.TOP);
@@ -93,7 +59,7 @@ public class MainActivity extends Activity
 			hnt.moveToFirst();
 			hints.setText(hnt.getString(0));
 			hints.setTextSize(35);
-			hints.setTag(this.counterId);
+			hints.setTag(c.getLong(0));
 			hnt.close();
 			row.addView(txt);
 			row.addView(hints);
@@ -119,6 +85,11 @@ public class MainActivity extends Activity
 		c.close();
 	}
 	
+	public void clearLayouts(){
+		LinearLayout counters = (LinearLayout)  findViewById(R.id.counters);
+		counters.removeAllViewsInLayout();
+	}
+	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
@@ -126,8 +97,9 @@ public class MainActivity extends Activity
 		this.target = v;
 		LinearLayout row = (LinearLayout) v;
 		TextView tv = (TextView) row.getChildAt(0);
+		this.counterName = tv.getText().toString();
 		inflater.inflate(R.menu.contextual_menu, menu);
-		String menuTitle = getString(R.string.menu_del)+" "+tv.getText().toString();
+		String menuTitle = getString(R.string.menu_del);
 		menu.add(0,R.id.menu_del,0,menuTitle);
 	}
 
@@ -160,7 +132,7 @@ public class MainActivity extends Activity
 				case DialogInterface.BUTTON_POSITIVE:
 					LinearLayout row = (LinearLayout) MainActivity.this.target;
 					TextView tv = (TextView) row.getChildAt(1);
-					Integer id = Integer.parseInt( tv.getTag().toString());
+					Integer id = Integer.parseInt(tv.getTag().toString());
 					MainActivity.this.db.execSQL("delete from hints where (id="+id.toString()+")");
 					MainActivity.this.db.execSQL("delete from counters where (id="+id.toString()+")");
 					row.removeAllViews();
@@ -169,6 +141,7 @@ public class MainActivity extends Activity
 		}
 		};
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(getString(R.string.confirm_deletion)).setPositiveButton(getString(R.string.yes), dialogClickListener).setNegativeButton(getString(R.string.no), dialogClickListener).show();
+		builder.setMessage(getString(R.string.confirm_deletion)+" "+MainActivity.this.counterName).setPositiveButton(getString(R.string.yes), dialogClickListener).setNegativeButton(getString(R.string.no), dialogClickListener).show();
+		MainActivity.this.counterName=null;
     }
 }

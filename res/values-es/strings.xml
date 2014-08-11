@@ -5,5 +5,5 @@
     <string name="menu_del">Eliminar contador</string>
 	<string name="yes">Sí</string>
 	<string name="no">No</string>
-	<string name="confirm_deletion">Por favor confirma que quieres eliminar el contador.</string>
+	<string name="confirm_deletion">Eliminando el contador:</string>
 </resources>
