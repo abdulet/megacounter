@@ -4,4 +4,6 @@
 		<item type="id" name="newCounter" />
 		<item type="id" name="menu_sub" />
 		<item type="id" name="menu_del" />
+		<item type="id" name="searchname" />
+		<item type="id" name="searchdate" />
 	</resources>

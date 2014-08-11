@@ -6,4 +6,6 @@
 	<string name="yes">Yes</string>
 	<string name="no">No</string>
 	<string name="confirm_deletion">Please confirm to remove the counter.</string>
+	<string name="searchname">Search by name</string>
+	<string name="searchdate">Search by date</string>
 </resources>
