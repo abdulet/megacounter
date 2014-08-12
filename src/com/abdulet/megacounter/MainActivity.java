@@ -158,4 +158,8 @@ public class MainActivity extends Activity
                 .setNegativeButton(getString(R.string.no), dialogClickListener).show();
 		MainActivity.this.counterName=null;
     }
+	
+	public void showSearchWindow(){
+		
+	}
 }

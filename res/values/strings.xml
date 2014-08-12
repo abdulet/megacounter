@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<!-- <string name=""></string> -->
     <string name="app_name">MegaCounter</string>
     <string name="menu_sub">Subtract</string>
     <string name="menu_del">Delete counter</string>
 	<string name="yes">Yes</string>
 	<string name="no">No</string>
 	<string name="confirm_deletion">Removing Counter:</string>
-	<string name="searchname">Search by name</string>
-	<string name="searchdate">Search by date</string>
+	<string name="name">Name</string>
+	<string name="fromDate">From date</string>
+	<string name="toDate">To date</string>
 </resources>

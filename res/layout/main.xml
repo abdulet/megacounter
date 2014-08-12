@@ -30,7 +30,7 @@
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_width="wrap_content"
 			android:src="@android:drawable/ic_menu_search"
-			android:visibility="gone"/>
+			android:onClick="showSearchWindow"/>
 
 	</LinearLayout>
 

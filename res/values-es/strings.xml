@@ -6,4 +6,7 @@
 	<string name="yes">Sí</string>
 	<string name="no">No</string>
 	<string name="confirm_deletion">Eliminando el contador:</string>
+	<string name="name">Nombre</string>
+	<string name="fromDate">Desde</string>
+	<string name="toDate">Hast</string>
 </resources>
