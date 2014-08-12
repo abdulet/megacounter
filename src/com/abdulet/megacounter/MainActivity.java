@@ -7,7 +7,7 @@ import android.view.*;
 import android.widget.*;
 //import android.widget.RadioGroup.*;
 //import android.support.v4.util.*;
-import android.util.*;
+//import android.util.*;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.*;
@@ -25,8 +25,11 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 		this.db=openOrCreateDatabase("megaCounter",MODE_PRIVATE,null);
-		this.db.execSQL("CREATE TABLE IF NOT EXISTS counters (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, date REAL DEFAULT (datetime('now', 'localtime')));");
-		this.db.execSQL("CREATE TABLE IF NOT EXISTS hints (id int,date REAL DEFAULT (datetime('now', 'localtime')));");
+		this.db.execSQL("CREATE TABLE IF NOT EXISTS counters " +
+                "(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR" +
+                ", date REAL DEFAULT (datetime('now', 'localtime')));");
+		this.db.execSQL("CREATE TABLE IF NOT EXISTS hints " +
+                "(id int,date REAL DEFAULT (datetime('now', 'localtime')));");
 		this.loadCounters();
     }
 	
@@ -44,7 +47,9 @@ public class MainActivity extends Activity
 		LinearLayout counters = (LinearLayout) findViewById(R.id.counters);
 		Cursor c = db.rawQuery("SELECT * FROM counters ORDER BY name", null);
 		c.moveToFirst();
-        LinearLayout.LayoutParams lpTxt = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams lpTxt = new LinearLayout.LayoutParams
+                (LinearLayout.LayoutParams.MATCH_PARENT
+                , LinearLayout.LayoutParams.WRAP_CONTENT);
         lpTxt.weight = 1;
 		while (!c.isAfterLast()){
 			LinearLayout row = new LinearLayout(this);
@@ -55,7 +60,8 @@ public class MainActivity extends Activity
 			txt.setText(c.getString(1));
             txt.setLayoutParams(lpTxt);
 			txt.setTextSize(35);
-			Cursor hnt = this.db.rawQuery("select count(date) from hints where id="+c.getLong(c.getColumnIndex("id"))+";",null);
+			Cursor hnt = this.db.rawQuery("select count(date) from hints where id="
+                    +c.getLong(c.getColumnIndex("id"))+";",null);
 			hnt.moveToFirst();
 			hints.setText(hnt.getString(0));
 			hints.setTextSize(35);
@@ -91,7 +97,8 @@ public class MainActivity extends Activity
 	}
 	
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+	public void onCreateContextMenu(ContextMenu menu, View v
+            , ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
 		this.target = v;
@@ -104,14 +111,13 @@ public class MainActivity extends Activity
 	}
 
     public boolean onContextItemSelected(MenuItem item) {
-        //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		LinearLayout row = (LinearLayout) this.target;
         switch (item.getItemId()) {
             case R.id.menu_sub:
                 this.subtract( (TextView) row.getChildAt(1));
                 return true;
             case R.id.menu_del:
-                this.delete(row);
+                this.delete(  );
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -122,26 +128,34 @@ public class MainActivity extends Activity
         int hints = Integer.parseInt(tv.getText().toString());
 		hints-=1;
         tv.setText(Integer.toString(hints));
-        this.db.execSQL("delete from hints where(id="+ tv.getTag().toString() +" and date=(select max(date) from hints where id="+ tv.getTag().toString() +"))");
+        this.db.execSQL("delete from hints where(id="
+                + tv.getTag().toString() +" and date=(select max(date) from hints where id="
+                + tv.getTag().toString() +"))");
     }
 
-    private void delete( LinearLayout row ){
-		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() { 
-		public void onClick(DialogInterface dialog, int which) {
-			switch (which) {
-				case DialogInterface.BUTTON_POSITIVE:
-					LinearLayout row = (LinearLayout) MainActivity.this.target;
-					TextView tv = (TextView) row.getChildAt(1);
-					Integer id = Integer.parseInt(tv.getTag().toString());
-					MainActivity.this.db.execSQL("delete from hints where (id="+id.toString()+")");
-					MainActivity.this.db.execSQL("delete from counters where (id="+id.toString()+")");
-					row.removeAllViews();
-				break;
-			}
-		}
+    private void delete(  ){
+		DialogInterface.OnClickListener dialogClickListener
+                = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        LinearLayout row = (LinearLayout) MainActivity.this.target;
+                        TextView tv = (TextView) row.getChildAt(1);
+                        Integer id = Integer.parseInt(tv.getTag().toString());
+                        MainActivity.this.db.execSQL
+                                ("delete from hints where (id="+id.toString()+")");
+                        MainActivity.this.db.execSQL
+                                ("delete from counters where (id="+id.toString()+")");
+                        row.removeAllViews();
+                    break;
+                }
+            }
 		};
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(getString(R.string.confirm_deletion)+" "+MainActivity.this.counterName).setPositiveButton(getString(R.string.yes), dialogClickListener).setNegativeButton(getString(R.string.no), dialogClickListener).show();
+		builder.setMessage(getString(R.string.confirm_deletion)
+                +" "+MainActivity.this.counterName)
+                .setPositiveButton(getString(R.string.yes), dialogClickListener)
+                .setNegativeButton(getString(R.string.no), dialogClickListener).show();
 		MainActivity.this.counterName=null;
     }
 }
