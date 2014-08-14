@@ -24,7 +24,7 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 	private View target;
 	private String counterName;
 	private PopupWindow pw;
-    private Long from, to;
+    private boolean fromMod=false, toMod=false;
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
@@ -183,9 +183,9 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
     public void onDateChanged(DatePicker v, int year, int monthOfYear,
                               int dayOfMonth) {
         if ( v.getId() == R.id.fromDate ){
-
+            fromMod = true;
         }else{
-
+            toMod = true;
         }
     }
 
@@ -196,7 +196,13 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 		String where = "";
 		if (!tv.getText().toString().contentEquals(""))
 			where = "name like '%"+tv.getText().toString()+"%'";
-		
+		if (fromMod == true) {
+            if (!where.equals(""))
+                where += " and ";
+            where += "date > ";
+        }
+        if (toMod == true)
+            where +="and date <";
 		android.util.Log.d("query", "SELECT name FROM counters WHERE ("+where+")");
 		pw.dismiss();
 	}
