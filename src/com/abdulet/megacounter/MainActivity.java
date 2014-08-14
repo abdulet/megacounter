@@ -200,13 +200,17 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 		if (!tv.getText().toString().contentEquals(""))
 			where = "name like '%"+tv.getText().toString()+"%'";
 		if (fromMod == true) {
-            c.set(from.getYear(), from.getMonth(), from.getDayOfMonth());
+            c.set(Calendar.YEAR, from.getYear());
+            c.set(Calendar.MONTH, from.getMonth());
+            c.set(Calendar.DAY_OF_MONTH, from.getDayOfMonth());
             if (!where.equals(""))
                 where += " and ";
             where += "date > "+Long.toString(c.getTimeInMillis());
         }
         if (toMod == true) {
-            c.set(to.getYear(), to.getMonth(), to.getDayOfMonth());
+            c.set(Calendar.YEAR, to.getYear());
+            c.set(Calendar.MONTH, to.getMonth());
+            c.set(Calendar.DAY_OF_MONTH, to.getDayOfMonth());
             where += "and date < "+Long.toString(c.getTimeInMillis());
         }
 		android.util.Log.d("query", "SELECT name FROM counters WHERE ("+where+")");
