@@ -40,9 +40,7 @@
 			android:calendarViewShown="false"
 			android:spinnersShown="false"
 			android:id="@id/searchFrom"
-            android:minDate="1/1/2000"
-            android:scaleX=".5"
-            android:scaleY=".5"
+            android:minDate="1/1/2013"
             android:layout_gravity="center_horizontal" />
 
 		<TextView
@@ -59,9 +57,7 @@
 			android:calendarViewShown="false"
 			android:spinnersShown="true"
 			android:id="@id/searchTo"
-            android:minDate="1/1/2000"
-            android:scaleX=".5"
-            android:scaleY=".5"
+            android:minDate="1/1/2013"
             android:layout_gravity="center_horizontal" />
 
 		<Button
