@@ -112,8 +112,8 @@ public class MainActivity extends Activity
 		this.counterName = tv.getText().toString();
 		inflater.inflate(R.menu.contextual_menu, menu);
 		String menuTitle = getString(R.string.menu_del);
-		menu.add(0,R.id.menu_del,0,menuTitle);
-	}
+		MenuItem item = menu.add(0,R.id.menu_del,0,menuTitle);
+    }
 
     public boolean onContextItemSelected(MenuItem item) {
 		LinearLayout row = (LinearLayout) this.target;
@@ -180,7 +180,7 @@ public class MainActivity extends Activity
 		DatePicker from = (DatePicker) findViewById(R.id.fromDate);
 		DatePicker to = (DatePicker) findViewById(R.id.toDate);
 		String where = "";
-		if (tv.getText().toString() != "")
+		if (!tv.getText().toString().contentEquals(""))
 			where = "name like '%"+tv.getText().toString()+"%'";
 		
 		android.util.Log.d("query", "SELECT name FROM counters WHERE ("+where+")");
