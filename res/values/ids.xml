@@ -5,12 +5,11 @@
 		<item type="id" name="newCounter" />
 		<item type="id" name="menu_sub" />
 		<item type="id" name="menu_del" />
-		<item type="id" name="searchname" />
-		<item type="id" name="searchdate" />
-		<item type="id" name="txtFromDate"/>
+		<item type="id" name="fromDate"/>
 		<item type="id" name="txtName"/>
 		<item type="id" name="searchName"/>
 		<item type="id" name="searchFrom"/>
-		<item type="id" name="txtToDate"/>
+		<item type="id" name="toDate"/>
 		<item type="id" name="searchTo"/>
+		<item type="id" name="popupParent"/>
 	</resources>

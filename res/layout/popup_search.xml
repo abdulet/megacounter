@@ -1,83 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:orientation="vertical">
+	android:layout_height="match_parent"
+	android:layout_width="match_parent"
+	android:id="@id/popupParent"
+	android:background="#000000">
 
 	<LinearLayout
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:orientation="horizontal">
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
 
 		<TextView
 			android:layout_height="wrap_content"
 			android:text="@string/name"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_width="wrap_content"
-			android:id="@id/txtName"/>
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_width="match_parent"
+			android:id="@id/txtName"
+			android:gravity="center"/>
 
 		<EditText
 			android:layout_height="wrap_content"
 			android:ems="10"
-			android:layout_width="wrap_content"
-			android:id="@id/searchName"/>
-
-	</LinearLayout>
-
-	<LinearLayout
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:orientation="horizontal">
+			android:layout_width="match_parent"
+			android:id="@id/searchName"
+			android:inputType="textAutoComplete"/>
 
 		<TextView
 			android:layout_height="wrap_content"
 			android:text="@string/fromDate"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_width="wrap_content"
-			android:id="@id/txtFromDate"/>
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_width="match_parent"
+			android:id="@id/fromDate"
+			android:gravity="center"/>
 
-		<EditText
+		<DatePicker
 			android:layout_height="wrap_content"
-			android:inputType="date"
-			android:ems="10"
 			android:layout_width="wrap_content"
+			android:calendarViewShown="false"
+			android:spinnersShown="true"
 			android:id="@id/searchFrom"/>
-
-	</LinearLayout>
-
-	<LinearLayout
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:orientation="horizontal">
 
 		<TextView
 			android:layout_height="wrap_content"
 			android:text="@string/toDate"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_width="wrap_content"
-			android:id="@id/txtToDate"/>
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_width="match_parent"
+			android:id="@id/toDate"
+			android:gravity="center"/>
 
-		<EditText
+		<DatePicker
 			android:layout_height="wrap_content"
-			android:inputType="date"
-			android:ems="10"
 			android:layout_width="wrap_content"
+			android:calendarViewShown="false"
+			android:spinnersShown="true"
 			android:id="@id/searchTo"/>
-	</LinearLayout>
-
-	<LinearLayout
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:orientation="horizontal">
 
 		<Button
 			android:layout_height="match_parent"
-			android:text="OK"
+			android:text="@string/ok"
 			android:layout_width="match_parent"
 			android:onClick="search"/>
 
 	</LinearLayout>
 
-</LinearLayout>
+</ScrollView>
 

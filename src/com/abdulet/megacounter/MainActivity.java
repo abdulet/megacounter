@@ -11,6 +11,10 @@ import android.widget.*;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.*;
+import java.util.zip.*;
+import org.apache.commons.logging.*;
+import android.util.*;
+import java.util.logging.*;
 //import android.nfc.*;
 
 public class MainActivity extends Activity
@@ -19,6 +23,7 @@ public class MainActivity extends Activity
 	private SQLiteDatabase db;
 	private View target;
 	private String counterName;
+	private PopupWindow pw;
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
@@ -159,7 +164,26 @@ public class MainActivity extends Activity
 		MainActivity.this.counterName=null;
     }
 	
-	public void showSearchWindow(){
+	public void showSearchWindow(View v){
+			//android.util.Log.d("aaa","jjjjjjjjj");
+		LayoutInflater inflater = (LayoutInflater) MainActivity.this
+			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.popup_search, 
+			(ViewGroup) findViewById(R.id.popupParent));
+		pw = new PopupWindow(layout, 700, 1100, true);
+		// display the popup in the center 
+		pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
+	}
+	
+	public void search(View v){
+		TextView tv = (TextView) findViewById(R.id.searchName);
+		DatePicker from = (DatePicker) findViewById(R.id.fromDate);
+		DatePicker to = (DatePicker) findViewById(R.id.toDate);
+		String where = "";
+		if (tv.getText().toString() != "")
+			where = "name like '%"+tv.getText().toString()+"%'";
 		
+		android.util.Log.d("query", "SELECT name FROM counters WHERE ("+where+")");
+		pw.dismiss();
 	}
 }

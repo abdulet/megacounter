@@ -19,7 +19,6 @@
 
 		<ImageButton
 			android:layout_height="wrap_content"
-			android:text="+"
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:src="@android:drawable/ic_menu_add"
