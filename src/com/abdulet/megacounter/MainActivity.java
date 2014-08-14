@@ -27,6 +27,7 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 	private String counterName;
 	private PopupWindow pw;
     private boolean fromMod=false, toMod=false;
+    DatePicker from, to;
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
@@ -175,16 +176,15 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 			(ViewGroup) findViewById(R.id.popupParent));
 		pw = new PopupWindow(layout, 700, 1100, true);
 		// display the popup in the center
-        DatePicker from = (DatePicker) findViewById(R.id.fromDate);
-        DatePicker to = (DatePicker) findViewById(R.id.toDate);
+        from = (DatePicker) findViewById(R.id.fromDate);
+        to = (DatePicker) findViewById(R.id.toDate);
 		Calendar c = Calendar.getInstance();
         from.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),this);
-        //to.init(to.getYear(),to.getMonth(),to.getDayOfMonth(),this);
+        to.init(to.getYear(),to.getMonth(),to.getDayOfMonth(),this);
 		pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
 	}
 
-    public void onDateChanged(DatePicker v, int year, int monthOfYear,
-                              int dayOfMonth) {
+    public void onDateChanged(DatePicker v, int year, int monthOfYear, int dayOfMonth) {
         if ( v.getId() == R.id.fromDate ){
             fromMod = true;
         }else{
