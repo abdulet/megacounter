@@ -177,8 +177,9 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 		// display the popup in the center
         DatePicker from = (DatePicker) findViewById(R.id.fromDate);
         DatePicker to = (DatePicker) findViewById(R.id.toDate);
-        from.init(from.getYear(),from.getMonth(),from.getDayOfMonth(),this);
-        to.init(to.getYear(),to.getMonth(),to.getDayOfMonth(),this);
+		Calendar c = Calendar.getInstance();
+        from.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),this);
+        //to.init(to.getYear(),to.getMonth(),to.getDayOfMonth(),this);
 		pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
 	}
 

@@ -38,7 +38,7 @@
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
 			android:calendarViewShown="false"
-			android:spinnersShown="false"
+			android:spinnersShown="true"
 			android:id="@id/searchFrom"
             android:minDate="1/1/2013"
             android:layout_gravity="center_horizontal" />
