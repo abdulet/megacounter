@@ -11,6 +11,8 @@ import android.widget.*;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.*;
+
+import java.util.Calendar;
 import java.util.zip.*;
 import org.apache.commons.logging.*;
 import android.util.*;
@@ -193,16 +195,20 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 		TextView tv = (TextView) findViewById(R.id.searchName);
 		DatePicker from = (DatePicker) findViewById(R.id.fromDate);
 		DatePicker to = (DatePicker) findViewById(R.id.toDate);
-		String where = "";
+        Calendar c = Calendar.getInstance();
+        String where = "";
 		if (!tv.getText().toString().contentEquals(""))
 			where = "name like '%"+tv.getText().toString()+"%'";
 		if (fromMod == true) {
+            c.set(from.getYear(), from.getMonth(), from.getDayOfMonth());
             if (!where.equals(""))
                 where += " and ";
-            where += "date > ";
+            where += "date > "+Long.toString(c.getTimeInMillis());
         }
-        if (toMod == true)
-            where +="and date <";
+        if (toMod == true) {
+            c.set(to.getYear(), to.getMonth(), to.getDayOfMonth());
+            where += "and date < "+Long.toString(c.getTimeInMillis());
+        }
 		android.util.Log.d("query", "SELECT name FROM counters WHERE ("+where+")");
 		pw.dismiss();
 	}
