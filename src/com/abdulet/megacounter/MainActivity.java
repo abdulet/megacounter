@@ -44,16 +44,17 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
                 "(id int,date REAL DEFAULT (datetime('now', 'localtime')));");
 		this.loadCounters();
     }
-	
-	@Override
+
 	public void createCounter (View view){
 		EditText counter = (EditText) findViewById(R.id.newCounter);
-		ContentValues values = new ContentValues();
-		values.put("name", counter.getText().toString());
-		this.db.insert("counters","",values);
-		this.clearLayouts();
-		this.loadCounters();
-		counter.setText("");
+        if(counter.getText() != null && !counter.getText().toString().equals("")) {
+            ContentValues values = new ContentValues();
+            values.put("name", counter.getText().toString());
+            this.db.insert("counters", "", values);
+            this.clearLayouts();
+            this.loadCounters();
+            counter.setText("");
+        }
 	}
 	
 	public void loadCounters(){
