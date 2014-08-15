@@ -19,6 +19,7 @@ import android.util.*;
 import java.util.logging.*;
 import android.nfc.*;
 import android.text.*;
+import android.view.animation.*;
 
 public class MainActivity extends Activity implements DatePicker.OnDateChangedListener
 {
@@ -180,12 +181,6 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 		Calendar c = Calendar.getInstance();
 		DatePicker sFrom = (DatePicker) layout.findViewById(R.id.searchFrom);
         DatePicker sTo = (DatePicker) layout.findViewById(R.id.searchTo);
-		/*
-		if(sFrom == null)
-			android.util.Log.d("aaa","null");
-		else
-			android.util.Log.d("aaa",sFrom.toString());
-			*/
 		sFrom.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), this);
 		sTo.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), this);
 		
@@ -203,13 +198,21 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
     }
 
 	public void search(View v){
-		TextView tv = (TextView) findViewById(R.id.searchName);
-		DatePicker from = (DatePicker) findViewById(R.id.fromDate);
-		DatePicker to = (DatePicker) findViewById(R.id.toDate);
+		LayoutInflater inflater = (LayoutInflater) MainActivity.this
+			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View ly = inflater.inflate(R.layout.popup_search, 
+									   (ViewGroup) findViewById(R.id.popupParent));
+		EditText tv = (EditText) ly.findViewById(R.id.searchName);
+		DatePicker from = (DatePicker) ly.findViewById(R.id.searchFrom);
+		DatePicker to = (DatePicker) ly.findViewById(R.id.searchTo);
         Calendar c = Calendar.getInstance();
         String where = "";
-		if (tv.getText() != null && !tv.getText().toString().contentEquals(""))
+		
+		android.util.Log.d("name", "jjjjj"+tv.getText().toString());
+		if (tv.getText() != null && !tv.getText().toString().contentEquals("")){
 			where = "name like '%"+tv.getText().toString()+"%'";
+		}
+		
 		if (fromMod == true) {
             c.set(Calendar.YEAR, from.getYear());
             c.set(Calendar.MONTH, from.getMonth());
@@ -217,12 +220,13 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
             if (!where.equals(""))
                 where += " and ";
             where += "date > "+Long.toString(c.getTimeInMillis());
-        }
-        if (toMod == true) {
-            c.set(Calendar.YEAR, to.getYear());
-            c.set(Calendar.MONTH, to.getMonth());
-            c.set(Calendar.DAY_OF_MONTH, to.getDayOfMonth());
-            where += "and date < "+Long.toString(c.getTimeInMillis());
+			
+			if (toMod == true) {
+				c.set(Calendar.YEAR, to.getYear());
+				c.set(Calendar.MONTH, to.getMonth());
+				c.set(Calendar.DAY_OF_MONTH, to.getDayOfMonth());
+				where += "and date < "+Long.toString(c.getTimeInMillis());
+			}
         }
 		android.util.Log.d("query", "SELECT name FROM counters WHERE ("+where+")");
 		pw.dismiss();
