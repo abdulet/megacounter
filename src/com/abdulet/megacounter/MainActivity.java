@@ -5,9 +5,9 @@ import android.os.*;
 //import android.util.AttributeSet;
 import android.view.*;
 import android.widget.*;
-//import android.widget.RadioGroup.*;
-//import android.support.v4.util.*;
-//import android.util.*;
+import android.widget.RadioGroup.*;
+import android.support.v4.util.*;
+import android.util.*;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.*;
@@ -17,7 +17,8 @@ import java.util.zip.*;
 import org.apache.commons.logging.*;
 import android.util.*;
 import java.util.logging.*;
-//import android.nfc.*;
+import android.nfc.*;
+import android.text.*;
 
 public class MainActivity extends Activity implements DatePicker.OnDateChangedListener
 {
@@ -27,7 +28,8 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 	private String counterName;
 	private PopupWindow pw;
     private boolean fromMod=false, toMod=false;
-    DatePicker from, to;
+    //private DatePicker from, to;
+	
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
@@ -42,6 +44,7 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 		this.loadCounters();
     }
 	
+	@Override
 	public void createCounter (View view){
 		EditText counter = (EditText) findViewById(R.id.newCounter);
 		ContentValues values = new ContentValues();
@@ -169,18 +172,25 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
     }
 	
 	public void showSearchWindow(View v){
-			//android.util.Log.d("aaa","jjjjjjjjj");
+		//android.util.Log.d("aaa","jjjjjjjjj");
 		LayoutInflater inflater = (LayoutInflater) MainActivity.this
 			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View layout = inflater.inflate(R.layout.popup_search, 
 			(ViewGroup) findViewById(R.id.popupParent));
+		Calendar c = Calendar.getInstance();
+		DatePicker sFrom = (DatePicker) layout.findViewById(R.id.searchFrom);
+        DatePicker sTo = (DatePicker) layout.findViewById(R.id.searchTo);
+		/*
+		if(sFrom == null)
+			android.util.Log.d("aaa","null");
+		else
+			android.util.Log.d("aaa",sFrom.toString());
+			*/
+		sFrom.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), this);
+		sTo.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), this);
+		
 		pw = new PopupWindow(layout, 700, 1100, true);
 		// display the popup in the center
-        from = (DatePicker) findViewById(R.id.fromDate);
-        to = (DatePicker) findViewById(R.id.toDate);
-		Calendar c = Calendar.getInstance();
-        from.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH),this);
-        to.init(to.getYear(),to.getMonth(),to.getDayOfMonth(),this);
 		pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
 	}
 
@@ -198,7 +208,7 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 		DatePicker to = (DatePicker) findViewById(R.id.toDate);
         Calendar c = Calendar.getInstance();
         String where = "";
-		if (!tv.getText().toString().contentEquals(""))
+		if (tv.getText() != null && !tv.getText().toString().contentEquals(""))
 			where = "name like '%"+tv.getText().toString()+"%'";
 		if (fromMod == true) {
             c.set(Calendar.YEAR, from.getYear());
