@@ -20,6 +20,7 @@ import java.util.logging.*;
 import android.nfc.*;
 import android.text.*;
 import android.view.animation.*;
+import javax.crypto.*;
 
 public class MainActivity extends Activity implements DatePicker.OnDateChangedListener
 {
@@ -28,8 +29,7 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 	private View target;
 	private String counterName;
 	private PopupWindow pw;
-    private boolean fromMod=false, toMod=false;
-    //private DatePicker from, to;
+	private Long dateFrom, dateTo;
 	
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -58,8 +58,13 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 	}
 	
 	public void loadCounters(){
+		this.loadCounters("SELECT * FROM counters", "ORDER BY name");
+	}
+	
+	public void loadCounters(String query, String order){
 		LinearLayout counters = (LinearLayout) findViewById(R.id.counters);
-		Cursor c = db.rawQuery("SELECT * FROM counters ORDER BY name", null);
+		
+		Cursor c = db.rawQuery(query+" "+order, null);
 		c.moveToFirst();
         LinearLayout.LayoutParams lpTxt = new LinearLayout.LayoutParams
                 (LinearLayout.LayoutParams.MATCH_PARENT
@@ -147,7 +152,7 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
                 + tv.getTag().toString() +"))");
     }
 
-    private void delete(  ){
+    private void delete(){
 		DialogInterface.OnClickListener dialogClickListener
                 = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
@@ -191,45 +196,69 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 	}
 
     public void onDateChanged(DatePicker v, int year, int monthOfYear, int dayOfMonth) {
-        if ( v.getId() == R.id.fromDate ){
-            fromMod = true;
+		String curDate = Integer.toString(year)+Integer.toString(monthOfYear)+Integer.toString(dayOfMonth);
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, monthOfYear);
+		c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		LinearLayout ly = (LinearLayout) v.getParent();
+        if ( v.getId() == R.id.searchFrom ){
+			c.set(Calendar.HOUR, 0);
+			c.set(Calendar.MINUTE,0);
+            dateFrom = c.getTimeInMillis();
+			DatePicker tmpTo = (DatePicker) ly.findViewById(R.id.searchTo);
+			c.set(Calendar.YEAR, tmpTo.getYear());
+			c.set(Calendar.MONTH, tmpTo.getMonth());
+			c.set(Calendar.DAY_OF_MONTH, tmpTo.getDayOfMonth());
+			if(dateFrom > c.getTimeInMillis()){
+				tmpTo.updateDate(year,monthOfYear,dayOfMonth);
+			}
         }else{
-            toMod = true;
+			c.set(Calendar.HOUR, 24);
+			c.set(Calendar.MINUTE,59);
+            dateTo = c.getTimeInMillis();
+			DatePicker tmpFrom = (DatePicker) ly.findViewById(R.id.searchFrom);
+			Calendar d = Calendar.getInstance();
+			d.set(Calendar.YEAR, tmpFrom.getYear());
+			d.set(Calendar.MONTH, tmpFrom.getMonth());
+			d.set(Calendar.DAY_OF_MONTH, tmpFrom.getDayOfMonth());
+			d.set(Calendar.HOUR, 0);
+			d.set(Calendar.MINUTE,0);
+			android.util.Log.d("longs", "dateTo: "+Long.toString(dateTo)+" From: "+Long.toString(d.getTimeInMillis()));
+			android.util.Log.d("recived date", Integer.toString(year)+Integer.toString(monthOfYear)+Integer.toString(dayOfMonth));
+			android.util.Log.d("dateFrom", Integer.toString(tmpFrom.getYear())+Integer.toString(tmpFrom.getMonth())+Integer.toString(tmpFrom.getDayOfMonth()));
+			if(dateTo < c.getTimeInMillis()){
+				tmpFrom.updateDate(year,monthOfYear,dayOfMonth);
+				android.util.Log.d("updated", "dateFrom updated to:"+Integer.toString(year)+Integer.toString(monthOfYear)+Integer.toString(dayOfMonth));
+			}
         }
     }
 
 	public void search(View v){
-		LayoutInflater inflater = (LayoutInflater) MainActivity.this
-			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View ly = inflater.inflate(R.layout.popup_search, 
-									   (ViewGroup) findViewById(R.id.popupParent));
+		LinearLayout ly = (LinearLayout) v.getParent();
 		EditText tv = (EditText) ly.findViewById(R.id.searchName);
-		DatePicker from = (DatePicker) ly.findViewById(R.id.searchFrom);
-		DatePicker to = (DatePicker) ly.findViewById(R.id.searchTo);
-        Calendar c = Calendar.getInstance();
         String where = "";
 		
-		android.util.Log.d("name", "jjjjj"+tv.getText().toString());
 		if (tv.getText() != null && !tv.getText().toString().contentEquals("")){
 			where = "name like '%"+tv.getText().toString()+"%'";
 		}
 		
-		if (fromMod == true) {
-            c.set(Calendar.YEAR, from.getYear());
-            c.set(Calendar.MONTH, from.getMonth());
-            c.set(Calendar.DAY_OF_MONTH, from.getDayOfMonth());
+		if (dateFrom != null && dateFrom > 0) {
             if (!where.equals(""))
                 where += " and ";
-            where += "date > "+Long.toString(c.getTimeInMillis());
+            where += "date > "+Long.toString(dateFrom);
+			dateFrom = null;
 			
-			if (toMod == true) {
-				c.set(Calendar.YEAR, to.getYear());
-				c.set(Calendar.MONTH, to.getMonth());
-				c.set(Calendar.DAY_OF_MONTH, to.getDayOfMonth());
-				where += "and date < "+Long.toString(c.getTimeInMillis());
+			if (dateTo != null && dateTo > 0) {
+				where += " and date < "+Long.toString(dateTo);
+				dateTo = null;
 			}
         }
 		android.util.Log.d("query", "SELECT name FROM counters WHERE ("+where+")");
+		/*
+		clearLayouts();
+		loadCounters("SELECT name FROM counters WHERE ("+where+")","ORDER BY name");
+		*/
 		pw.dismiss();
 	}
 }
