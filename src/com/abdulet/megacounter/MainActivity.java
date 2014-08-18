@@ -16,7 +16,6 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 	private View target;
 	private String counterName;
 	private PopupWindow pw;
-	private Long dateFrom, dateTo;
 	
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -209,18 +208,28 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 	public void search(View v){
 		LinearLayout ly = (LinearLayout) v.getParent();
 		EditText tv = (EditText) ly.findViewById(R.id.searchName);
+		DatePicker dpFrom = (DatePicker) ly.findViewById(R.id.searchFrom);
+		DatePicker dpTo = (DatePicker) ly.findViewById(R.id.searchTo);
+		Calendar c = Calendar.getInstance();
         String where = "";
 		
 		if (tv.getText() != null && !tv.getText().toString().contentEquals("")){
 			where = "name like '%"+tv.getText().toString()+"%'";
 		}
 		
+		c.set(Calendar.YEAR, dpFrom.getYear());
+		c.set(Calendar.MONTH, dpFrom.getMonth());
+		c.set(Calendar.DAY_OF_MONTH, dpFrom.getDayOfMonth());
+		Long dateFrom = c.getTimeInMillis();
 		if (dateFrom != null && dateFrom > 0) {
             if (!where.equals(""))
                 where += " and ";
             where += "date > "+Long.toString(dateFrom);
 			dateFrom = null;
-			
+			c.set(Calendar.YEAR, dpTo.getYear());
+			c.set(Calendar.MONTH, dpTo.getMonth());
+			c.set(Calendar.DAY_OF_MONTH, dpTo.getDayOfMonth());
+			Long dateTo = c.getTimeInMillis();
 			if (dateTo != null && dateTo > 0) {
 				where += " and date < "+Long.toString(dateTo);
 				dateTo = null;
