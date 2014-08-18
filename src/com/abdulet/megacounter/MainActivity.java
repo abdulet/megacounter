@@ -2,25 +2,12 @@ package com.abdulet.megacounter;
 
 import android.app.*;
 import android.os.*;
-//import android.util.AttributeSet;
 import android.view.*;
 import android.widget.*;
-import android.widget.RadioGroup.*;
-import android.support.v4.util.*;
-import android.util.*;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.*;
-
 import java.util.Calendar;
-import java.util.zip.*;
-import org.apache.commons.logging.*;
-import android.util.*;
-import java.util.logging.*;
-import android.nfc.*;
-import android.text.*;
-import android.view.animation.*;
-import javax.crypto.*;
 
 public class MainActivity extends Activity implements DatePicker.OnDateChangedListener
 {
@@ -126,7 +113,7 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 		this.counterName = tv.getText().toString();
 		inflater.inflate(R.menu.contextual_menu, menu);
 		String menuTitle = getString(R.string.menu_del);
-		MenuItem item = menu.add(0,R.id.menu_del,0,menuTitle);
+		menu.add(0,R.id.menu_del,0,menuTitle);
     }
 
     public boolean onContextItemSelected(MenuItem item) {
@@ -196,40 +183,25 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 	}
 
     public void onDateChanged(DatePicker v, int year, int monthOfYear, int dayOfMonth) {
-		String curDate = Integer.toString(year)+Integer.toString(monthOfYear)+Integer.toString(dayOfMonth);
-		Calendar c = Calendar.getInstance();
-		c.set(Calendar.YEAR, year);
-		c.set(Calendar.MONTH, monthOfYear);
-		c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		String strNewDate = Integer.toString(year)
+                +Integer.toString(monthOfYear)+Integer.toString(dayOfMonth);
+        Integer intNewDate = Integer.parseInt(strNewDate);
 		LinearLayout ly = (LinearLayout) v.getParent();
         if ( v.getId() == R.id.searchFrom ){
-			c.set(Calendar.HOUR, 0);
-			c.set(Calendar.MINUTE,0);
-            dateFrom = c.getTimeInMillis();
 			DatePicker tmpTo = (DatePicker) ly.findViewById(R.id.searchTo);
-			c.set(Calendar.YEAR, tmpTo.getYear());
-			c.set(Calendar.MONTH, tmpTo.getMonth());
-			c.set(Calendar.DAY_OF_MONTH, tmpTo.getDayOfMonth());
-			if(dateFrom > c.getTimeInMillis()){
+			String strDateTo = Integer.toString(tmpTo.getYear())
+                    +Integer.toString(tmpTo.getMonth())+Integer.toString(tmpTo.getDayOfMonth());
+            Integer intDateTo = Integer.parseInt(strDateTo);
+			if(intNewDate > intDateTo){
 				tmpTo.updateDate(year,monthOfYear,dayOfMonth);
 			}
         }else{
-			c.set(Calendar.HOUR, 24);
-			c.set(Calendar.MINUTE,59);
-            dateTo = c.getTimeInMillis();
 			DatePicker tmpFrom = (DatePicker) ly.findViewById(R.id.searchFrom);
-			Calendar d = Calendar.getInstance();
-			d.set(Calendar.YEAR, tmpFrom.getYear());
-			d.set(Calendar.MONTH, tmpFrom.getMonth());
-			d.set(Calendar.DAY_OF_MONTH, tmpFrom.getDayOfMonth());
-			d.set(Calendar.HOUR, 0);
-			d.set(Calendar.MINUTE,0);
-			android.util.Log.d("longs", "dateTo: "+Long.toString(dateTo)+" From: "+Long.toString(d.getTimeInMillis()));
-			android.util.Log.d("recived date", Integer.toString(year)+Integer.toString(monthOfYear)+Integer.toString(dayOfMonth));
-			android.util.Log.d("dateFrom", Integer.toString(tmpFrom.getYear())+Integer.toString(tmpFrom.getMonth())+Integer.toString(tmpFrom.getDayOfMonth()));
-			if(dateTo < c.getTimeInMillis()){
+			String strDateFrom = Integer.toString(tmpFrom.getYear())
+                    +Integer.toString(tmpFrom.getMonth())+Integer.toString(tmpFrom.getDayOfMonth());
+            Integer intDateFrom = Integer.parseInt(strDateFrom);
+			if(intNewDate < intDateFrom){
 				tmpFrom.updateDate(year,monthOfYear,dayOfMonth);
-				android.util.Log.d("updated", "dateFrom updated to:"+Integer.toString(year)+Integer.toString(monthOfYear)+Integer.toString(dayOfMonth));
 			}
         }
     }
