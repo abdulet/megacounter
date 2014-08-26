@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.*;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class MainActivity extends Activity implements DatePicker.OnDateChangedListener
 {
@@ -176,8 +177,22 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
         DatePicker sTo = (DatePicker) layout.findViewById(R.id.searchTo);
 		sFrom.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), this);
 		sTo.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), this);
-		
-		pw = new PopupWindow(layout, 700, 1100, true);
+
+        layout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        /*
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        int width, height;
+        try {
+            display.getSize(size);
+            width = size.x;
+            height = size.y;
+        } catch (NoSuchMethodError e) {
+            width = display.getWidth();
+            height = display.getHeight();
+        }
+        */
+		pw = new PopupWindow(layout, layout.getMeasuredWidth(), layout.getMeasuredHeight(), true);
 		// display the popup in the center
 		pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
 	}
@@ -195,6 +210,7 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 			if(intNewDate > intDateTo){
 				tmpTo.updateDate(year,monthOfYear,dayOfMonth);
 			}
+            dateFrom = intNewDate.longValue();
         }else{
 			DatePicker tmpFrom = (DatePicker) ly.findViewById(R.id.searchFrom);
 			String strDateFrom = Integer.toString(tmpFrom.getYear())
@@ -203,14 +219,29 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 			if(intNewDate < intDateFrom){
 				tmpFrom.updateDate(year,monthOfYear,dayOfMonth);
 			}
+            dateTo = intNewDate.longValue();
         }
     }
 
 	public void search(View v){
 		LinearLayout ly = (LinearLayout) v.getParent();
 		EditText tv = (EditText) ly.findViewById(R.id.searchName);
+        DatePicker dFrom = (DatePicker) ly.findViewById(R.id.searchFrom);
+        DatePicker dTo = (DatePicker) ly.findViewById(R.id.searchTo);
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+        //Calendar d = Calendar.getInstance(TimeZone.getDefault());
         String where = "";
-		
+
+        cal.set(Calendar.YEAR, dFrom.getYear());
+        cal.set(Calendar.MONTH, dFrom.getMonth());
+        cal.set(Calendar.DAY_OF_MONTH, dFrom.getDayOfMonth());
+        android.util.Log.d("Time From", Long.toString(cal.getTimeInMillis()));
+        cal.set(Calendar.YEAR, dTo.getYear());
+        cal.set(Calendar.MONTH, dTo.getMonth());
+        cal.set(Calendar.DAY_OF_MONTH, dTo.getDayOfMonth());
+        android.util.Log.d("Time To", Long.toString(cal.getTimeInMillis()));
+
+
 		if (tv.getText() != null && !tv.getText().toString().contentEquals("")){
 			where = "name like '%"+tv.getText().toString()+"%'";
 		}
