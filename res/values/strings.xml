@@ -11,4 +11,5 @@
 	<string name="fromDate">From date</string>
 	<string name="toDate">To date</string>
 	<string name="ok">OK</string>
+    <string name="clearSearch">Clear search</string>
 </resources>

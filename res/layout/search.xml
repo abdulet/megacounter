@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <ScrollView
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="match_parent"
-	android:layout_width="match_parent"
-	android:id="@id/popupParent"
-	android:background="#000000"
-    android:padding="2dp">
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent">
 
 	<LinearLayout
-		android:layout_width="match_parent"
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical">
 
@@ -17,7 +15,6 @@
 			android:text="@string/name"
 			android:textAppearance="?android:attr/textAppearanceLarge"
 			android:layout_width="match_parent"
-			android:id="@id/txtName"
 			android:gravity="center"/>
 
 		<EditText
@@ -32,7 +29,6 @@
 			android:text="@string/fromDate"
 			android:textAppearance="?android:attr/textAppearanceLarge"
 			android:layout_width="match_parent"
-			android:id="@id/fromDate"
 			android:gravity="center"/>
 
 		<DatePicker
@@ -49,7 +45,6 @@
 			android:text="@string/toDate"
 			android:textAppearance="?android:attr/textAppearanceLarge"
 			android:layout_width="match_parent"
-			android:id="@id/toDate"
 			android:gravity="center"/>
 
 		<DatePicker
@@ -66,8 +61,6 @@
 			android:text="@string/ok"
 			android:layout_width="match_parent"
 			android:onClick="search"/>
-
 	</LinearLayout>
 
 </ScrollView>
-

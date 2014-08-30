@@ -10,4 +10,5 @@
 	<string name="fromDate">Des de</string>
 	<string name="toDate">Fins a</string>
 	<string name="ok">OK</string>
+    <string name="clearSearch">Clear search</string>
 </resources>
