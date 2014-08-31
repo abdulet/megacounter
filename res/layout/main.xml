@@ -39,7 +39,8 @@
         android:text="@string/clearSearch"
         android:id="@+id/clearSearch"
         android:visibility="gone"
-        android:onClick="clearSearch" />
+        android:onClick="clearSearch"
+        android:nestedScrollingEnabled="false" />
 
     <ScrollView
 		android:layout_height="match_parent"

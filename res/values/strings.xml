@@ -12,4 +12,5 @@
 	<string name="toDate">To date</string>
 	<string name="ok">OK</string>
     <string name="clearSearch">Clear search</string>
+    <string name="menu_chart">Get stats</string>
 </resources>

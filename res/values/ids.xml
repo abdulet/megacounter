@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<resources>
-		<!-- <item type="id" name=""/> -->
-		<item type="id" name="counters" />
-		<item type="id" name="newCounter" />
-		<item type="id" name="menu_sub" />
-		<item type="id" name="menu_del" />
-		<item type="id" name="searchName"/>
-		<item type="id" name="searchFrom"/>
-		<item type="id" name="searchTo"/>
-        <item type="id" name="clearSearch"/>
-	</resources>
+<resources>
+    <!-- <item type="id" name=""/> -->
+    <item type="id" name="counters" />
+    <item type="id" name="newCounter" />
+    <item type="id" name="menu_sub" />
+    <item type="id" name="menu_del" />
+    <item type="id" name="searchName"/>
+    <item type="id" name="searchFrom"/>
+    <item type="id" name="searchTo"/>
+    <item type="id" name="clearSearch"/>
+    <item type="id" name="lineGraph"/>
+    <item name="menu_chart" type="id" />
+    <item name="graphPeriod" type="id" />
+</resources>

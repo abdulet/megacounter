@@ -53,9 +53,6 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 
         android.util.Log.d("query in Load", query+" "+order);
 		Cursor c = db.rawQuery(query+" "+order, null);
-        if (c.getCount() == 0){
-            android.util.Log.d("Query 0 results", query+" "+order);
-        }
 
         LinearLayout.LayoutParams lpTxt = new LinearLayout.LayoutParams
                 (LinearLayout.LayoutParams.MATCH_PARENT
@@ -117,8 +114,8 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 		TextView tv = (TextView) row.getChildAt(0);
 		this.counterName = tv.getText().toString();
 		inflater.inflate(R.menu.contextual_menu, menu);
-		String menuTitle = getString(R.string.menu_del);
-		menu.add(0,R.id.menu_del,0,menuTitle);
+        menu.add(0,R.id.menu_chart,0, getString(R.string.menu_chart));
+		menu.add(0,R.id.menu_del,0, getString(R.string.menu_del));
     }
 
     public boolean onContextItemSelected(MenuItem item) {
@@ -128,7 +125,10 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
                 this.subtract( (TextView) row.getChildAt(1));
                 return true;
             case R.id.menu_del:
-                this.delete(  );
+                this.delete();
+                return true;
+            case R.id.menu_chart:
+                this.getStats();
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -250,5 +250,10 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
         clearLayouts();
         loadCounters();
         v.setVisibility(View.GONE);
+    }
+
+    public void getStats(){
+        LinearLayout row = (LinearLayout) target;
+
     }
 }
