@@ -254,6 +254,7 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 
     public void getStats(){
         LinearLayout row = (LinearLayout) target;
-
+		TextView tv = (TextView ) row.getChildAt(1);
+		Integer cId = Integer.parseInt(tv.getText().toString());
     }
 }
