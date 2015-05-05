@@ -10,6 +10,9 @@
     <item type="id" name="searchTo"/>
     <item type="id" name="clearSearch"/>
     <item type="id" name="lineGraph"/>
-    <item name="menu_chart" type="id" />
+    <item name="menu_dayChart" type="id" />
+	<item name="menu_weekChart" type="id" />
+	<item name="menu_monthChart" type="id" />
+	<item name="menu_yearChart" type="id" />
     <item name="graphPeriod" type="id" />
 </resources>

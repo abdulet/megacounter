@@ -9,6 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.content.*;
 import java.util.Calendar;
 import java.util.TimeZone;
+import org.achartengine.*;
+import org.achartengine.model.*;
+import org.achartengine.renderer.*;
+import org.achartengine.chart.*;
+import android.graphics.*;
 
 public class MainActivity extends Activity implements DatePicker.OnDateChangedListener
 {
@@ -17,6 +22,7 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 	private View target;
 	private String counterName;
 	private Long dateFrom, dateTo;
+	private int DAY=0, WEEK=1, MONTH=2, YEAR=3;
 	
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -105,7 +111,8 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 	}
 	
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v
+	public void onCreateContextMenu(
+	ContextMenu menu, View v
             , ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
@@ -114,8 +121,11 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 		TextView tv = (TextView) row.getChildAt(0);
 		this.counterName = tv.getText().toString();
 		inflater.inflate(R.menu.contextual_menu, menu);
-        menu.add(0,R.id.menu_chart,0, getString(R.string.menu_chart));
 		menu.add(0,R.id.menu_del,0, getString(R.string.menu_del));
+		menu.add(0,R.id.menu_dayChart,0, getString(R.string.menu_dayChart));
+		menu.add(0,R.id.menu_weekChart,0, getString(R.string.menu_weekChart));
+		menu.add(0,R.id.menu_monthChart,0, getString(R.string.menu_monthChart));
+		menu.add(0,R.id.menu_yearChart,0, getString(R.string.menu_yearChart));
     }
 
     public boolean onContextItemSelected(MenuItem item) {
@@ -127,8 +137,17 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
             case R.id.menu_del:
                 this.delete();
                 return true;
-            case R.id.menu_chart:
-                this.getStats();
+            case R.id.menu_dayChart:
+                this.getStats(this.DAY);
+                return true;
+			case R.id.menu_weekChart:
+                this.getStats(this.WEEK);
+                return true;
+			case R.id.menu_monthChart:
+                this.getStats(this.MONTH);
+                return true;
+			case R.id.menu_yearChart:
+                this.getStats(this.YEAR);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -252,9 +271,79 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
         v.setVisibility(View.GONE);
     }
 
-    public void getStats(){
+	private XYSeries getSeries(int period, int id, String name){
+		XYSeries series = new XYSeries(name);
+		//Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+		//Calendar.YEAR
+		//Calendar.MONTH
+		//Calendar.DAY_OF_MONTH
+		Date mDate = sdf.parse(givenDateString); 
+		long timeInMilliseconds = mDate.getTime();
+		String query = "SELECT * FROM counters ";
+		Cursor c = db.rawQuery(query, null);
+		return series;
+	}
+	
+    public void getStats(int period){
         LinearLayout row = (LinearLayout) target;
 		TextView tv = (TextView ) row.getChildAt(1);
 		Integer cId = Integer.parseInt(tv.getText().toString());
+		tv = (TextView ) row.getChildAt(1);
+		
+		// example from: http://www.survivingwithandroid.com/2014/06/android-chart-tutorial-achartengine.html?m=1
+		XYSeries series = this.getSeries(period, cId, tv.getText().toString());
+		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+
+		/*
+		for(i=0; i<counters.length; i++){
+			series.add(unity,counters[i]);
+		}
+		*/
+		
+		dataset.addSeries(series);
+		
+		// Now we create the renderer
+		XYSeriesRenderer renderer = new XYSeriesRenderer();
+		renderer.setLineWidth(2); 
+		renderer.setColor(Color.RED); 
+		
+		// Include low and max value 
+		renderer.setDisplayBoundingPoints(true);
+		
+		// we add point markers 
+		renderer.setPointStyle(PointStyle.CIRCLE); 
+		renderer.setPointStrokeWidth(3);
+		
+		XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
+		mRenderer.addSeriesRenderer(renderer);
+
+		// We want to avoid black border
+		mRenderer.setMarginsColor(Color.argb(0x00, 0xff, 0x00, 0x00)); // transparent margins 
+		// Disable Pan on two axis 
+		mRenderer.setPanEnabled(false, false); 
+		mRenderer.setYAxisMax(35); 
+		mRenderer.setYAxisMin(0); 
+		mRenderer.setShowGrid(true); // we show the grid
+		
+		GraphicalView chartView = ChartFactory.getLineChartView(MainActivity.this, dataset, mRenderer);
+		
+		//add to view
+		//chartLyt.addView(chartView,0);
     }
+	
+	public void getStatsDay (){
+		this.getStats(this.DAY);
+	}
+	
+	public void getStatsWek (){
+		this.getStats(this.WEEK);
+	}
+	
+	public void getStatsMonth (){
+		this.getStats(this.MONTH);
+	}
+	
+	public void getStatsYear (){
+		this.getStats(this.YEAR);
+	}
 }

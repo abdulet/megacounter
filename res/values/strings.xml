@@ -12,5 +12,8 @@
 	<string name="toDate">To date</string>
 	<string name="ok">OK</string>
     <string name="clearSearch">Clear search</string>
-    <string name="menu_chart">Get stats</string>
+    <string name="menu_dayChart">1 day graph</string>
+	<string name="menu_weekChart">1 week graph</string>
+	<string name="menu_monthChart">1 month graph</string>
+	<string name="menu_yearChart">1 year graph</string>
 </resources>
