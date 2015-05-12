@@ -22,7 +22,8 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 	private View target;
 	private String counterName;
 	private Long dateFrom, dateTo;
-	private int DAY=0, WEEK=1, MONTH=2, YEAR=3;
+	private static final int DAY=0, WEEK=1, MONTH=2, YEAR=3;
+	private static final int DAYINMILS=1440000, WEEKINMILS=10080000, MONTHINMILS=43200000, YEARINMILS=525600000;
 	
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -273,13 +274,27 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 
 	private XYSeries getSeries(int period, int id, String name){
 		XYSeries series = new XYSeries(name);
-		//Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+		Calendar cal = Calendar.getInstance(TimeZone.getDefault());
 		//Calendar.YEAR
 		//Calendar.MONTH
 		//Calendar.DAY_OF_MONTH
-		Date mDate = sdf.parse(givenDateString); 
-		long timeInMilliseconds = mDate.getTime();
-		String query = "SELECT * FROM counters ";
+		String query = "SELECT * FROM counters where (id="+Integer.toString(id);
+		long Fromdate = 0;
+		switch(period){
+			case DAY:
+				Fromdate = cal.getTimeInMillis() - DAYINMILS;
+				break;
+			case WEEK:
+				Fromdate = cal.getTimeInMillis() - WEEKINMILS;
+				break;
+			case MONTH:
+				Fromdate = cal.getTimeInMillis() - MONTHINMILS;
+				break;
+			case YEAR:
+				Fromdate = cal.getTimeInMillis() - YEARINMILS;
+				break;
+		}
+		query.concat(" AND date > "+Long.toString(Fromdate)+")");
 		Cursor c = db.rawQuery(query, null);
 		return series;
 	}
