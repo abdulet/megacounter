@@ -294,8 +294,12 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
 				Fromdate = cal.getTimeInMillis() - YEARINMILS;
 				break;
 		}
-		query.concat(" AND date > "+Long.toString(Fromdate)+")");
+		query.concat(" AND date >= "+Long.toString(Fromdate)+")");
 		Cursor c = db.rawQuery(query, null);
+		while (!c.isAfterLast()){
+			long timeRange = cal.getTimeInMillis() -  Fromdate;
+			int timeRangeInDays = (int) timeRange/DAYINMILS;
+		}
 		return series;
 	}
 	
